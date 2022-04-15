@@ -11,3 +11,17 @@ class RecipeResult {
     var name = ""
     var text = ""
 }
+
+class ResultArray: Codable {
+    var searchResults = [SearchResult]()
+}
+
+class SearchResult: Codable {
+    var results = [Result]()
+}
+
+class Result: Codable {
+    var name: String? = ""
+    //var image: String?
+    var content: String? = ""
+}
