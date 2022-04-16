@@ -7,21 +7,22 @@
 
 import UIKit
 
-class RecipeResult {
-    var name = ""
-    var text = ""
-}
-
 class ResultArray: Codable {
-    var searchResults = [SearchResult]()
-}
-
-class SearchResult: Codable {
     var results = [Result]()
+    
 }
 
-class Result: Codable {
-    var name: String? = ""
-    //var image: String?
-    var content: String? = ""
+// MARK: - Result
+class Result: Codable, CustomStringConvertible {
+    var description: String {
+        return "\nResults - Name: \(title) "
+    }
+    
+    //var id: Int
+    var title: String = ""
+    var image = ""
+
+}
+func < (lhs: Result, rhs: Result) -> Bool {
+    return lhs.title.localizedStandardCompare(rhs.title) == .orderedAscending 
 }
