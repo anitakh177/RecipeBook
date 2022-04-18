@@ -9,7 +9,7 @@ import UIKit
 
 class SearchViewController: UIViewController {
     
-    let apiKey = "ef82e20a213a464789d031801d926649"
+    let apiKey = "put your api token"
     var recipeResults = [Result]()
     var hasSearched = false
     var isLoading = false
