@@ -49,7 +49,7 @@ class SearchViewController: UIViewController {
     
     func spoonURL(searchText: String) -> URL {
         let encodedText = searchText.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
-        let urlString = String(format: "https://api.spoonacular.com/recipes/complexSearch?query=%@&instructionsRequired=true&addRecipeInformation=true&apiKey=\(apiKey)", encodedText)
+        let urlString = String(format: "https://api.spoonacular.com/recipes/complexSearch?query=%@&instructionsRequired=true&addRecipeInformation=true&number=100&apiKey=\(apiKey)", encodedText)
         let url = URL(string: urlString)
         return url!
     }

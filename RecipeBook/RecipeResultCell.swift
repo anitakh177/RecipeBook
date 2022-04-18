@@ -43,5 +43,11 @@ class RecipeResultCell: UITableViewCell {
             }
         }
     }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        downloadTask?.cancel()
+        downloadTask = nil
+    }
 
 }
