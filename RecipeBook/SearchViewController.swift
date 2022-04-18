@@ -14,7 +14,7 @@ class SearchViewController: UIViewController {
     var hasSearched = false
     var isLoading = false
     var dataTask: URLSessionDataTask?
-    
+   
     @IBOutlet var searchBar: UISearchBar!
     @IBOutlet var tableView: UITableView!
     
@@ -42,7 +42,7 @@ class SearchViewController: UIViewController {
     
     func spoonURL(searchText: String) -> URL {
         let encodedText = searchText.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
-        let urlString = String(format: "https://api.spoonacular.com/recipes/complexSearch?query=%@&type&apiKey=\(apiKey)", encodedText)
+        let urlString = String(format: "https://api.spoonacular.com/recipes/complexSearch?query=%@&instructionsRequired=true&addRecipeInformation=true&apiKey=\(apiKey)", encodedText)
         let url = URL(string: urlString)
         return url!
     }
@@ -143,8 +143,8 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: TableView.CellIdentifiers.recipeResultCell, for: indexPath) as! RecipeResultCell
             let recipeResult = recipeResults[indexPath.row]
             cell.nameLabel.text = recipeResult.title
-            //cell.texTLabel.text = recipeResult.
-            return cell
+            cell.texTLabel.text = String(recipeResult.readyInMinutes)
+                return cell
             }
         }
     
