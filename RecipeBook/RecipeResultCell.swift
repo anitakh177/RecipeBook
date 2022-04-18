@@ -11,7 +11,9 @@ class RecipeResultCell: UITableViewCell {
     
     @IBOutlet var nameLabel: UILabel!
     @IBOutlet var texTLabel: UILabel!
+    @IBOutlet var servingsLabel: UILabel!
     @IBOutlet var recipeImageView: UIImageView!
+    var downloadTask: URLSessionDownloadTask?
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -24,6 +26,22 @@ class RecipeResultCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }
+    
+    func configure(for result: Result) {
+        nameLabel.text = result.title
+        
+        if result.readyInMinutes == nil || result.servings == nil {
+            texTLabel.text = ""
+            servingsLabel.text = ""
+        } else {
+            texTLabel.text = String(format: "%d", result.readyInMinutes!)
+            servingsLabel.text = String(format: "%d", result.servings!)
+            recipeImageView.image = UIImage(systemName: "square")
+            if let imageFood = URL(string: result.image) {
+                downloadTask = recipeImageView.loadImage(url: imageFood)
+            }
+        }
     }
 
 }

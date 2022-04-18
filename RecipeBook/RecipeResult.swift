@@ -16,10 +16,11 @@ class Result: Codable, CustomStringConvertible {
 
     var title: String = ""
     var image = ""
-    var readyInMinutes: Int = 0
+    var readyInMinutes: Int? = 0
+    var servings: Int? = 0
     
     var description: String {
-        return "\nResults - Name: \(title), Summary: \(readyInMinutes) "
+        return "\nResults - Name: \(title), Summary: \(String(describing: readyInMinutes ?? nil)), \(String(describing: servings ?? nil)) "
     }
     
    

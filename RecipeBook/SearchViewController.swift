@@ -14,9 +14,14 @@ class SearchViewController: UIViewController {
     var hasSearched = false
     var isLoading = false
     var dataTask: URLSessionDataTask?
+    
    
     @IBOutlet var searchBar: UISearchBar!
     @IBOutlet var tableView: UITableView!
+    
+   
+
+    
     
     struct TableView {
         struct CellIdentifiers {
@@ -36,7 +41,9 @@ class SearchViewController: UIViewController {
         tableView.register(cellNib, forCellReuseIdentifier: TableView.CellIdentifiers.nothingFoundCell)
         cellNib = UINib(nibName: TableView.CellIdentifiers.loadingCell, bundle: nil)
         tableView.register(cellNib, forCellReuseIdentifier: TableView.CellIdentifiers.loadingCell)
-        
+        searchBar.searchTextField.backgroundColor = UIColor(red: 241/255, green: 245/255, blue: 248/255, alpha: 1)
+       
+
     }
     // MARK: - Network
     
@@ -142,8 +149,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
             } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: TableView.CellIdentifiers.recipeResultCell, for: indexPath) as! RecipeResultCell
             let recipeResult = recipeResults[indexPath.row]
-            cell.nameLabel.text = recipeResult.title
-            cell.texTLabel.text = String(recipeResult.readyInMinutes)
+                cell.configure(for: recipeResult)
                 return cell
             }
         }
@@ -161,5 +167,3 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
-
-    

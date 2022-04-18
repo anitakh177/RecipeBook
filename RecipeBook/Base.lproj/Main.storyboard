@@ -3,6 +3,7 @@
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -26,6 +27,7 @@
                             </tableView>
                             <searchBar contentMode="redraw" placeholder="Search Recipe" translatesAutoresizingMaskIntoConstraints="NO" id="15H-GM-0Vs">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="51"/>
+                                <color key="barTintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="qU3-Ke-pFa"/>
@@ -34,6 +36,7 @@
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="tintColor" name="orange"/>
                         <constraints>
                             <constraint firstItem="15H-GM-0Vs" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="6aJ-os-PQY"/>
                             <constraint firstItem="15H-GM-0Vs" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="Y2g-lE-8qy"/>
@@ -55,6 +58,9 @@
         </scene>
     </scenes>
     <resources>
+        <namedColor name="orange">
+            <color red="1" green="0.50196078431372548" blue="0.3411764705882353" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
