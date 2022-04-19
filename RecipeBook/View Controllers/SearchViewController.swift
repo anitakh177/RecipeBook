@@ -9,7 +9,7 @@ import UIKit
 
 class SearchViewController: UIViewController {
     
-    let apiKey = "put your api token"
+    let apiKey = "ef82e20a213a464789d031801d926649"
     var recipeResults = [Result]()
     var hasSearched = false
     var isLoading = false
@@ -42,8 +42,7 @@ class SearchViewController: UIViewController {
         cellNib = UINib(nibName: TableView.CellIdentifiers.loadingCell, bundle: nil)
         tableView.register(cellNib, forCellReuseIdentifier: TableView.CellIdentifiers.loadingCell)
         searchBar.searchTextField.backgroundColor = UIColor(red: 241/255, green: 245/255, blue: 248/255, alpha: 1)
-       
-
+        searchBar.searchTextField.leftView?.tintColor = UIColor(red: 255/255, green: 128/255, blue: 87/255, alpha: 1)
     }
     // MARK: - Network
     

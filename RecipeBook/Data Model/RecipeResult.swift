@@ -22,7 +22,7 @@ class Result: Codable, CustomStringConvertible {
         return "\nResults - Name: \(title), Summary: \(String(describing: readyInMinutes ?? nil)), \(String(describing: servings ?? nil)) "
     }
 }
-    // MARK: - Steps
+   /* // MARK: - Steps
 
 class Step: Codable {
     var number: Int = 0
@@ -45,7 +45,7 @@ enum Unit: String, Codable {
     case fahrenheit = "Fahrenheit"
     case minutes = "minutes"
 }
-
+*/
 
 func < (lhs: Result, rhs: Result) -> Bool {
     return lhs.title.localizedStandardCompare(rhs.title) == .orderedAscending 
