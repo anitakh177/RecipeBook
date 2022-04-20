@@ -9,19 +9,12 @@ import UIKit
 
 class SearchViewController: UIViewController {
     
-    let apiKey = "ef82e20a213a464789d031801d926649"
-    var recipeResults = [Result]()
-    var hasSearched = false
-    var isLoading = false
-    var dataTask: URLSessionDataTask?
     
+    
+    private let search = Search()
    
     @IBOutlet var searchBar: UISearchBar!
     @IBOutlet var tableView: UITableView!
-    
-   
-
-    
     
     struct TableView {
         struct CellIdentifiers {
@@ -44,26 +37,20 @@ class SearchViewController: UIViewController {
         searchBar.searchTextField.backgroundColor = UIColor(red: 241/255, green: 245/255, blue: 248/255, alpha: 1)
         searchBar.searchTextField.leftView?.tintColor = UIColor(red: 255/255, green: 128/255, blue: 87/255, alpha: 1)
     }
-    // MARK: - Network
     
-    func spoonURL(searchText: String) -> URL {
-        let encodedText = searchText.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
-        let urlString = String(format: "https://api.spoonacular.com/recipes/complexSearch?query=%@&instructionsRequired=true&addRecipeInformation=true&number=100&apiKey=\(apiKey)", encodedText)
-        let url = URL(string: urlString)
-        return url!
-    }
-
-    
-    func parse(data: Data) -> [Result] {
-        do {
-            let decoder = JSONDecoder()
-            let result = try decoder.decode(ResultArray.self, from: data)
-            return result.results
-        } catch {
-            print("JSON Error: \(error)")
-            return []
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "ShowDetail" {
+            if case .results(let list) = search.state {
+            let detailViewController = segue.destination as! DetailViewController
+            let indexPath = sender as! IndexPath
+            let recipeResult = list[indexPath.row]
+            detailViewController.recipeResult = recipeResult
+            }
         }
+            
     }
+    // MARK: - Network
+   
     
     func showNetworkError() {
         let alert = UIAlertController(title: "Whoops..." , message: "There was an error accessing the Recipe Book." + "Please try again.", preferredStyle: .alert)
@@ -76,46 +63,21 @@ class SearchViewController: UIViewController {
 // MARK: - Search Bar Delegate
 
 extension SearchViewController: UISearchBarDelegate {
+
+    func performSearch() {
+        search.performSearch(for: searchBar.text!) {
+            success in
+            if !success {
+                self.showNetworkError()
+            }
+            self.tableView.reloadData()
+        }
+        tableView.reloadData()
+        searchBar.resignFirstResponder()
+    }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        
-        if !searchBar.text!.isEmpty {
-            searchBar.resignFirstResponder()
-            isLoading = true
-            dataTask?.cancel()
-            tableView.reloadData()
-            
-            hasSearched = true
-            recipeResults = []
-            
-            let url = spoonURL(searchText: searchBar.text!)
-            let session = URLSession.shared
-            dataTask = session.dataTask(with: url) { data, response, error in
-                if let error = error as NSError?, error.code == -999 {
-                    return
-                } else if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
-                    if let data = data {
-                        self.recipeResults = self.parse(data: data)
-                        self.recipeResults.sort(by: <)
-                        DispatchQueue.main.async {
-                            self.isLoading = false
-                            self.tableView.reloadData()
-                        }
-                        return
-                    }
-                } else {
-                    print("Failure: \(response!)")
-                }
-                DispatchQueue.main.async {
-                    self.hasSearched = false
-                    self.isLoading = false
-                    self.tableView.reloadData()
-                    self.showNetworkError()
-                }
-                }
-            dataTask?.resume()
-            }
-        
+        performSearch()
         }
     
     func position(for bar: UIBarPositioning) -> UIBarPosition {
@@ -126,28 +88,33 @@ extension SearchViewController: UISearchBarDelegate {
 
 extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if isLoading {
+        switch search.state {
+        case .notSearchedYet:
+            return 0
+        case .loading:
             return 1
-        } else if !hasSearched {
-          return 0
-        } else if recipeResults.count == 0 {
-          return 1
-        } else {
-          return recipeResults.count
+        case .noResults:
+            return 1
+        case .results(let list):
+            return list.count
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if isLoading {
+        switch search.state {
+        case .notSearchedYet:
+            fatalError("Should never get here")
+            
+        case .loading:
             let cell = tableView.dequeueReusableCell(withIdentifier: TableView.CellIdentifiers.loadingCell, for: indexPath)
             let spinner = cell.viewWithTag(100) as! UIActivityIndicatorView
             spinner.startAnimating()
             return cell
-        } else if recipeResults.count == 0 {
+        case .noResults:
             return tableView.dequeueReusableCell(withIdentifier: TableView.CellIdentifiers.nothingFoundCell, for: indexPath)
-            } else {
+        case .results(let list):
             let cell = tableView.dequeueReusableCell(withIdentifier: TableView.CellIdentifiers.recipeResultCell, for: indexPath) as! RecipeResultCell
-            let recipeResult = recipeResults[indexPath.row]
+                let recipeResult = list[indexPath.row]
                 cell.configure(for: recipeResult)
                 return cell
             }
@@ -155,12 +122,14 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        performSegue(withIdentifier: "ShowDetail", sender: indexPath)
     }
     
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        if recipeResults.count == 0  || isLoading {
+        switch search.state {
+        case .notSearchedYet, .loading, .noResults:
             return nil
-        } else {
+        case .results:
             return indexPath
         }
     }

@@ -17,17 +17,23 @@ class Result: Codable, CustomStringConvertible {
     var image = ""
     var readyInMinutes: Int? = 0
     var servings: Int? = 0
+    var analyzedInstructions = [AnalyzedInstruction]()
     
     var description: String {
         return "\nResults - Name: \(title), Summary: \(String(describing: readyInMinutes ?? nil)), \(String(describing: servings ?? nil)) "
     }
 }
-   /* // MARK: - Steps
+// MARK: - Steps
+
+class AnalyzedInstruction: Codable {
+    var name: String? = ""
+    var steps = [Step]()
+}
 
 class Step: Codable {
     var number: Int = 0
     var step: String = ""
-    var ingredients, equipment: [Ent]
+    var ingredients = [Ent]()
     var length: Length?
 }
 class Ent: Codable {
@@ -45,7 +51,7 @@ enum Unit: String, Codable {
     case fahrenheit = "Fahrenheit"
     case minutes = "minutes"
 }
-*/
+
 
 func < (lhs: Result, rhs: Result) -> Bool {
     return lhs.title.localizedStandardCompare(rhs.title) == .orderedAscending 
