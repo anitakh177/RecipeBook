@@ -10,6 +10,7 @@ import Foundation
 typealias SearchComplete = (Bool) -> Void
 
 class Search {
+    var instractions = [String]()
     
     enum State {
         case notSearchedYet
@@ -35,7 +36,7 @@ class Search {
                     return
                 }
                 if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200, let data = data {
-                    var recipeResults = self.parse(data: data)
+                  var recipeResults = self.parse(data: data)
                     if recipeResults.isEmpty {
                         newState = .noResults
                     } else {
@@ -67,10 +68,14 @@ class Search {
         do {
             let decoder = JSONDecoder()
             let result = try decoder.decode(ResultArray.self, from: data)
+           
             return result.results
         } catch {
             print("JSON Error: \(error)")
             return []
         }
     }
+   
+   
 }
+

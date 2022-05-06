@@ -11,10 +11,18 @@ import CoreData
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
+var window: UIWindow?
+    
+    var searcVC: UITabBarController {
+        return window!.rootViewController as! UITabBarController
+    }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        window = UIWindow(frame: UIScreen.main.bounds)
+        window?.rootViewController = UITabBarController()
+        window?.makeKeyAndVisible()
+      
         return true
     }
 

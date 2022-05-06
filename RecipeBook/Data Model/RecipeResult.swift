@@ -7,16 +7,21 @@
 
 import UIKit
 
-class ResultArray: Codable {
+struct ResultArray: Codable {
     var results = [Result]()
+   
     
 }
-class Result: Codable, CustomStringConvertible {
+struct Result: Codable, CustomStringConvertible {
 
     var title: String = ""
     var image = ""
     var readyInMinutes: Int? = 0
     var servings: Int? = 0
+    var cuisines = [String]()
+    var dishTypes = [String]()
+    var diets = [String]()
+    var occasions = [String]()
     var analyzedInstructions = [AnalyzedInstruction]()
     
     var description: String {
@@ -25,25 +30,26 @@ class Result: Codable, CustomStringConvertible {
 }
 // MARK: - Steps
 
-class AnalyzedInstruction: Codable {
+struct AnalyzedInstruction: Codable {
     var name: String? = ""
     var steps = [Step]()
+    
 }
 
-class Step: Codable {
+struct Step: Codable {
     var number: Int = 0
     var step: String = ""
     var ingredients = [Ent]()
-    var length: Length?
+    //var length: Length?
 }
-class Ent: Codable {
+struct Ent: Codable {
     var id: Int
     var name, localizedName, image: String
     var temperature: Length?
 }
 
 
-class Length: Codable {
+struct Length: Codable {
     var number: Int = 0
     var unit: Unit
 }
